@@ -4,7 +4,7 @@ import java.util.*;
 
 class UDPServer
 {
-	private static int port = 9001;	// Global variable declaring port number
+	private static int port = 1050;	// Global variable declaring port number
 	
 	public static void main(String args[]) throws Exception
 	{
@@ -14,25 +14,7 @@ class UDPServer
 		boolean state = true;
 		boolean temp = false;
 		Vector<String> users = new Vector();
-	
-//		Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-//		while (interfaces.hasMoreElements())
-//		{
-//			NetworkInterface current = interfaces.nextElement();
-//			System.out.println(current);
-//			if (!current.isUp() || current.isLoopback() || current.isVirtual()) continue;
-//			Enumeration<InetAddress> addresses = current.getInetAddresses();
-//			while (addresses.hasMoreElements())
-//			{
-//				InetAddress current_addr = addresses.nextElement();
-//				if (current_addr.isLoopbackAddress()) continue;
-//				if (current_addr instanceof Inet4Address)
-//					System.out.println(current_addr.getHostAddress());
-//				else if (current_addr instanceof Inet6Address)
-//					System.out.println(current_addr.getHostAddress());
-//				}
-//			}
-	
+		
 		while(state)
 		{
 			receiveData = new byte[1024];
@@ -61,10 +43,26 @@ class UDPServer
 				System.out.print("Command " + i + ": ");
 				String[] parts = commands[i].split(",");
 				
+				// Register command
 				if (parts[0].equals("REG"))
 				{
 					if (!users.contains(parts[1].toUpperCase()))
 					{
+//						if (parts[1].length() > 32)
+						if (( parts[1].matches("[a-z]+") 
+								|| parts[1].matches("[A-Z]+") 
+								|| parts[1].matches("[0-9]+") )
+								&& parts[1].length() > 32)
+						{
+							System.out.println("INU");
+							sendData = "INU".getBytes();
+							DatagramPacket sendPacket = new DatagramPacket(sendData, 
+									sendData.length, 
+									IPAddress, 
+									port);
+							serverSocket.send(sendPacket);
+						}
+						
 						users.add(parts[1].toUpperCase());
 						System.out.println(users);
 						sendData = "ROK".getBytes();
@@ -75,7 +73,7 @@ class UDPServer
 					}
 					else
 					{
-						System.out.println("Print else");
+						System.out.println("UAE");
 						sendData = "UAE".getBytes();
 						DatagramPacket sendPacket = new DatagramPacket(sendData, 
 								sendData.length, 
@@ -83,6 +81,58 @@ class UDPServer
 								port);
 						serverSocket.send(sendPacket);
 					}
+				}
+//				System.out.println();
+				
+				// Unregister command
+				else if (parts[0].equals("UNR"))
+				{
+//					if (!users.contains(parts[1].toUpperCase()))
+//					{
+//						users.add(parts[1].toUpperCase());
+//						System.out.println(users);
+//						sendData = "ROK".getBytes();
+//						DatagramPacket sendPacket = new DatagramPacket(sendData, 
+//								sendData.length, 
+//								IPAddress, port);
+//						serverSocket.send(sendPacket);
+//					}
+//					else
+//					{
+//						System.out.println("UAE");
+//						sendData = "UAE".getBytes();
+//						DatagramPacket sendPacket = new DatagramPacket(sendData, 
+//								sendData.length, 
+//								IPAddress, 
+//								port);
+//						serverSocket.send(sendPacket);
+//					}
+				}
+//				System.out.println();
+				
+				// Quote
+				else if (parts[0].equals("QUO"))
+				{
+//					if (!users.contains(parts[1].toUpperCase()))
+//					{
+//						users.add(parts[1].toUpperCase());
+//						System.out.println(users);
+//						sendData = "ROK".getBytes();
+//						DatagramPacket sendPacket = new DatagramPacket(sendData, 
+//								sendData.length, 
+//								IPAddress, port);
+//						serverSocket.send(sendPacket);
+//					}
+//					else
+//					{
+//						System.out.println("UAE");
+//						sendData = "UAE".getBytes();
+//						DatagramPacket sendPacket = new DatagramPacket(sendData, 
+//								sendData.length, 
+//								IPAddress, 
+//								port);
+//						serverSocket.send(sendPacket);
+//					}
 				}
 				System.out.println();
 			}
