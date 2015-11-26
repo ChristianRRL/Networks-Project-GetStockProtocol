@@ -8,7 +8,7 @@ class UDPServer
 	
 	public static void main(String args[]) throws Exception
 	{
-		DatagramSocket serverSocket = new DatagramSocket(port);
+		DatagramSocket serverSocket = new DatagramSocket(port);	// Connect to port socket
 		byte[] receiveData = new byte[1024];
 		byte[] sendData = new byte[1024];
 		boolean state = true;
