@@ -31,7 +31,7 @@ class GetStockClient
 			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 			clientSocket.receive(receivePacket);
 			String modifiedSentence = new String(receivePacket.getData());
-			System.out.println(modifiedSentence);
+			System.out.println("Response Message: " + modifiedSentence);
 			
 			sentence = "";
 			modifiedSentence ="";
