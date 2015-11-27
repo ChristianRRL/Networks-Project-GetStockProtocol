@@ -62,25 +62,25 @@ class GetStockServer
 		        case "REG":
 	            	if (verifyUserParameters(field) == false)
 	            	{
-	            		sendMessage("INP", IPAddress, serverSocket, port);
+	            		sendMessage("INP;", IPAddress, serverSocket, port);
 	            	}
 	            	else
 	            	{
 	            		String user_name = field[1];
 	            		if (verifyUserName(user_name) == false)
 	            		{
-	            			sendMessage("INU", IPAddress, serverSocket, port);
+	            			sendMessage("INU;", IPAddress, serverSocket, port);
 	            		}
 	            		else
 	            		{
 	            			if (!users.contains(user_name))
 	            			{
 	            				users.add(user_name);
-	            				sendMessage("ROK", IPAddress, serverSocket, port);
+	            				sendMessage("ROK;", IPAddress, serverSocket, port);
 	            			}
 	            			else
 	            			{
-	            				sendMessage("UAE", IPAddress, serverSocket, port);
+	            				sendMessage("UAE;", IPAddress, serverSocket, port);
 	            			}
 	            		}
 	            	}
@@ -88,25 +88,25 @@ class GetStockServer
 	            case "UNR":
 	            	if (verifyUserParameters(field) == false)
 	            	{
-	            		sendMessage("INP", IPAddress, serverSocket, port);
+	            		sendMessage("INP;", IPAddress, serverSocket, port);
 	            	}
 	            	else
 	            	{
 	            		String user_name = field[1];
 	            		if (verifyUserName(user_name) == false)
 	            		{
-	            			sendMessage("INU", IPAddress, serverSocket, port);
+	            			sendMessage("INU;", IPAddress, serverSocket, port);
 	            		}
 	            		else
 	            		{
 	            			if (users.contains(user_name))
 	            			{
 	            				users.remove(user_name);
-	            				sendMessage("ROK", IPAddress, serverSocket, port);
+	            				sendMessage("ROK;", IPAddress, serverSocket, port);
 	            			}
 	            			else
 	            			{
-	            				sendMessage("UNR", IPAddress, serverSocket, port);
+	            				sendMessage("UNR;", IPAddress, serverSocket, port);
 	            			}
 	            		}
 	
@@ -115,33 +115,32 @@ class GetStockServer
 	            case "QUO":
 	            	if (verifyQuoteParameters(field) == false)
 	            	{
-	            		sendMessage("INP", IPAddress, serverSocket, port);
+	            		sendMessage("INP;", IPAddress, serverSocket, port);
 	            	}
 	            	else
 	            	{
 	            		String user_name = field[1];
 	            		if (!users.contains(user_name))
 	            		{
-	            			sendMessage("UNR", IPAddress, serverSocket, port);
+	            			sendMessage("UNR;", IPAddress, serverSocket, port);
 	            		}
 	            		else
 	            		{
 		            		//create a String quote_list array of only quotes (remove command & username)
-		            		String[] stock_list = new String[field.length - 2];
+		            		List<String> stock_list = new Vector<String>();
 		            		String quote_list = "";
-		            		for (int i = 2; i < stock_list.length; i++)
+		            		for (int i = 2; i < field.length; i++)
 		            		{
-		            			stock_list[i] = field[i];
+		            			stock_list.add(field[i]);
 		            		}
-		            		quote_list = "ROK" + quoteList(stock_list);
+		            		quote_list = "ROK," + quoteList(stock_list);
 		            		sendMessage(quote_list, IPAddress, serverSocket, port);
-//		            		sendMessage("TST", IPAddress, serverSocket, port);
 	            		}
 	            	}
 	            	break;
 	            default: 
-					System.out.println("INC");
-					sendMessage("INC", IPAddress, serverSocket, port);
+					System.out.println("INC;");
+					sendMessage("INC;", IPAddress, serverSocket, port);
 	            	break;
 	            }//END SWITCH
 		        
@@ -209,47 +208,35 @@ class GetStockServer
 	}
 
 	// verifyQuote 'may' be non-static because i may need to be created/dependent on the User class
-	public static String quoteList(String[] stock_list) throws FileNotFoundException
+	public static String quoteList(List<String> stock_list) throws FileNotFoundException
 	{
 		Scanner scanner = new Scanner(new File("stockfile.txt"));
-//		List<String> stockData = new Vector<String>();
 		Map<String, String> stockMap = new HashMap<String, String>();
 		
 		while (scanner.hasNextLine()) 
 		{
-			//stockData.add(scanner.nextLine());
 			String[] parts = scanner.nextLine().split(" ");
 			stockMap.put(parts[0], parts[1]);
-//			String line = scanner.nextLine();
-//			System.out.println(line);
-        }
+        }		
 		
-		for (String name: stockMap.keySet()){
-
-            String key =name.toString();
-            String value = stockMap.get(name).toString();  
-            System.out.println(key + " " + value);  
-
-
-} 
-		
-		String quote_list = ",";
+		String quote_list = "";
 		for(String stock : stock_list)
 		{
 			if (!stockMap.containsKey(stock))
 			{
+				System.out.println(stock);
 				quote_list += "-1";
 			}
 			else
 			{
 				quote_list += stockMap.get(stock);
 			}
-
+			quote_list += ",";
 		}
 		
 		scanner.close();
 		
-		return  quote_list;
+		return  quote_list.substring(0, quote_list.length() - 1) + ";";	// remove last comma and append semicolon 
 	}
 	
 	public static void sendMessage(String command, InetAddress IPAddress, DatagramSocket serverSocket, int port) throws IOException
