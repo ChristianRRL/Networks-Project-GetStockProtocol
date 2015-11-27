@@ -24,6 +24,7 @@ Key definitions for GetStock are:
 ###Assumptions
 
 The assumptions for GetStock are:
+
 1.  May only use UDP (TCP and HTTP may not be used).
 2.  The server and client are reachable from each other.
 3.  The GetStock server contains a table of stock names and values. An example table is [stockfile.txt](http://www.cse.usf.edu/~christen/class2/stockfile.txt).
@@ -31,6 +32,7 @@ The assumptions for GetStock are:
 ###Requirements
 
 The requirements that GetStock must meet are:
+
 1.  A user must be able to register with the server using a user name.
   a.  If a user attempts to register with a user name already registered, then a suitable error message must be returned.
 2.  A user must be able to unregister with the server using their user name.
