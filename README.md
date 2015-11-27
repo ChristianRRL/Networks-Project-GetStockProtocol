@@ -47,6 +47,7 @@ We will discuss standards creation in class. We (that is, the entire class) will
 ###Project deliverables
 
 Each team of two students will deliver the following:
+
 1.  A working and standards compliant GetStock server and client that can run on Windows and/or Linux and/or Android.
 2.  Full source code in buildable for for their GetStock server and client.
 3.  A report containing:
@@ -75,6 +76,7 @@ Additional grade points can be earned as follows:
 ###Remarks
 
 Some remarks for the project are:
+
 1.  If the requirements are incomplete or inconsistent, fix them. Send the fixed requirements to me and I will post them for the entire class to review.
 2.  This is not a user interface class, so the simplest possible command prompt interface is sufficient. The requirements, nor the protocol standard to be developed in class, will make any statements on the user interface.
 3.  This is not a database class, so the simplest possible linear search in the stock table is sufficient. The requirement, nor the protocol standard to be developed in class, will make any statements on table look-up.
