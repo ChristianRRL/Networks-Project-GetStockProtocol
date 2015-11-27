@@ -1,2 +1,0 @@
-Assumptions:
-1. spaces are invalid parameters
