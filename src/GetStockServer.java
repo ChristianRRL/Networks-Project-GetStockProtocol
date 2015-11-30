@@ -19,7 +19,7 @@ class GetStockServer
 	{
 		DatagramSocket serverSocket = new DatagramSocket(PORT);	//connect to port socket
 		List<String> users = new Vector<String>();
-		
+		int count = 1;
 		while (true)
 		{
 			byte[] receiveMessage = new byte[1024];	//reset receiveMessage every time loop iterates
@@ -30,7 +30,7 @@ class GetStockServer
 					receivePacket.getOffset(),
 					receivePacket.getLength(),
 					"UTF-8");
-			System.out.println("Received Message: " + message);
+			System.out.println("C-to-S message " + count + " = " + message);
 			
 			
 			InetAddress IPAddress = receivePacket.getAddress();
@@ -120,10 +120,14 @@ class GetStockServer
 	            	else
 	            	{
 	            		String user_name = field[1];
-	            		if (!users.contains(user_name))
+	            		if (!verifyUserName(user_name))
+	            		{
+	            			sendMessage("INU;",IPAddress, serverSocket, port);
+	            		}
+	            		else if (!users.contains(user_name))
 	            		{
 	            			sendMessage("UNR;", IPAddress, serverSocket, port);
-	            		}
+	            		}	            		
 	            		else
 	            		{
 		            		//create a String quote_list array of only quotes (remove command & username)
@@ -145,6 +149,8 @@ class GetStockServer
 	            }//END SWITCH
 		        
 			}//END OUTER ELSE
+			
+			count++;
 			
 		}//END WHILE
 		
